@@ -1,14 +1,14 @@
 Features:
-	•	Landing page with link to login
-	•	Login form with username + password fields
-	•	Session-based authentication
-	•	Protected page only accessible to logged-in users
-	•	Logout functionality
-	•	Futuristic glass-style UI
+- Landing page with link to login
+- Login form with username + password fields
+- Session-based authentication
+- Protected page only accessible to logged-in users
+- Logout functionality
+- Futuristic glass-style UI
 
 Default Credentials:
-	•	Username: testuser
-	•	Password: password123
+- Username: testuser
+- Password: password123
 
 Setup Instructions
 
