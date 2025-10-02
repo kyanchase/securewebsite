@@ -1,0 +1,42 @@
+Future Plans for Secure Website
+===============================
+
+This project currently meets the requirements of the homework assignment: 
+a simple website with user authentication, session-based login, protected content, and logout.
+
+The following items outline improvements that could be made if this were to evolve into a more secure, production-ready system:
+
+1. Authentication & User Management
+   - Remove hardcoded username and password from app.py.
+   - Store user credentials securely in a database (e.g., SQLite, PostgreSQL).
+   - Implement secure password hashing (e.g., Werkzeug's generate_password_hash / check_password_hash).
+   - Add a user registration system.
+
+2. Application Security
+   - Replace hardcoded Flask secret key with an environment variable.
+   - Disable debug mode when running in production.
+   - Add CSRF protection to forms (via Flask-WTF or another library).
+   - Add rate limiting to the login endpoint to prevent brute force attacks.
+
+3. Input Validation
+   - Implement server-side validation of login credentials.
+   - Sanitize user input to prevent injection attacks.
+
+4. Deployment & Infrastructure
+   - Set up HTTPS for secure communication.
+   - Run Flask behind a production web server (e.g., Gunicorn + Nginx).
+   - Research containerization (Docker) for portability.
+
+5. Frontend & User Experience
+   - Review CSS and JavaScript for potential vulnerabilities.
+   - Improve responsive design for mobile devices.
+   - Add feedback messages for login success/failure with animations.
+
+6. Expansion Ideas
+   - Add password reset functionality.
+   - Add user roles (e.g., admin, regular user).
+   - Add more protected pages and features once users are logged in.
+
+---
+
+This document is not required for the assignment but shows potential directions for future work.
