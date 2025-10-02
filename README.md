@@ -10,7 +10,7 @@ Default Credentials:
 - Username: testuser
 - Password: password123
 
-Setup Instructions
+Setup Instructions:
 
 1. Clone the repository
 
