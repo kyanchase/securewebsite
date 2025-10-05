@@ -2,7 +2,7 @@ Future Plans for Secure Website
 ===============================
 
 This project currently meets the requirements of the homework assignment: 
-a simple website with user authentication, session-based login, protected content, and logout.
+a simple website with user authentication, protected content, and logout.
 
 The following items outline improvements that could be made if this were to evolve into a more secure, production-ready system:
 
