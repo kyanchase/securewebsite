@@ -1,17 +1,3 @@
-"""
-Simple Flask app for the example secure website.
-
-This module demonstrates minimal routes for a landing page, login, a
-protected page, and logout. It intentionally uses a hard-coded credential
-pair for illustrative purposes only. Do NOT use this pattern in production.
-
-Security notes:
-- The app uses Flask's session (signed cookie) to keep track of the logged-in
-  user. The `secret_key` must be a long, unpredictable value in real apps.
-- There's no CSRF protection on the login POST in this demo. Use Flask-WTF or
-  another CSRF protection mechanism for real forms.
-"""
-
 from flask import Flask, render_template, request, redirect, url_for, session
 
 
@@ -22,10 +8,6 @@ app = Flask(__name__)
 # In production, load this from an environment variable or a secrets manager.
 app.secret_key = "seupersecretkey"
 
-
-# ---------------------------------------------------------------------------
-# Example credentials
-# ---------------------------------------------------------------------------
 # Hard-coded credentials for demonstration. Replace with a proper user store
 # (database + hashed passwords) for anything beyond examples or testing.
 USERNAME = "testuser"
