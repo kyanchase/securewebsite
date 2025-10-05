@@ -3,8 +3,6 @@
     login.html
     - Renders the login form and shows an optional error message.
     - The form posts back to the same `/login` route handled by `app.py`.
-    - Note: This example does not include CSRF protection. For production,
-        integrate WTForms/Flask-WTF or another CSRF mechanism to protect POSTs.
 -->
 <html lang="en">
 <head>
@@ -20,9 +18,6 @@
         <!--
             If the view renders with an `error` variable (set by `app.py` on failed
             login), display it prominently above the form using the `.error` class.
-            Keep rendering simple: the string is not escaped here by Jinja (it is
-            rendered safely by default), but avoid injecting raw HTML from untrusted
-            sources into `error`.
         -->
         {% if error %}
                 <p class="error">{{ error }}</p>
@@ -30,10 +25,8 @@
 
         <!--
             Login form
-            - Uses `method="POST"` to send credentials to the server.
             - Fields use `required` attribute for basic browser-side validation.
             - Keep `name` attributes (`username`, `password`) in sync with `app.py`.
-            - For accessibility, each input has a corresponding `<label for=>`.
         -->
         <form method="POST" class="login-wrapper">
                 <h2>Login</h2>
