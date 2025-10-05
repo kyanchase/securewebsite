@@ -1,13 +1,38 @@
 <!DOCTYPE html>
+<!--
+    index.html
+    - Public landing page for the example secure website.
+    - This file is a Jinja2 template rendered by Flask (see `app.py`).
+    - Keep this file presentation-only: it links to the CSS in `/static` and
+        provides a link to the login route.
+-->
 <html>
 <head>
-    <title>My Secure Web Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <!-- Page title shown in the browser tab -->
+        <title>My Secure Web Page</title>
+
+        <!--
+            Link to the single stylesheet used by the site. `url_for('static', filename='style.css')`
+            is a Flask helper that generates the correct URL for the `static/style.css` asset.
+            This keeps template paths robust across different deployment setups.
+        -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="content-box">
-        <h1>Welcome to My Secure Web Page</h1>
-        <p><a href="{{ url_for('login') }}">Login</a> to continue.</p>
-    </div>
+        <!--
+            Main centered content box. Styling is handled in `static/style.css`.
+            The CSS class `content-box` applies the frosted-glass look and fixed width.
+        -->
+        <div class="content-box">
+                <!-- Heading for the site. Keep semantic markup for accessibility. -->
+                <h1>Welcome to My Secure Web Page</h1>
+
+                <!--
+                    The login link uses Flask's `url_for` to point at the `login` route.
+                    Using `url_for` in templates avoids hardcoding routes and keeps
+                    links consistent if route names change.
+                -->
+                <p><a href="{{ url_for('login') }}">Login</a> to continue.</p>
+        </div>
 </body>
 </html>

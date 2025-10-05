@@ -1,23 +1,53 @@
 <!DOCTYPE html>
+<!--
+    login.html
+    - Renders the login form and shows an optional error message.
+    - The form posts back to the same `/login` route handled by `app.py`.
+    - Note: This example does not include CSRF protection. For production,
+        integrate WTForms/Flask-WTF or another CSRF mechanism to protect POSTs.
+-->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <!-- Link to CSS via Flask -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- The browser tab title -->
+        <title>Login</title>
+
+        <!-- Include site stylesheet via Flask's `url_for('static', ...)` helper -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
-    <form method="POST" class="login-wrapper">
-        <h2>Login</h2>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Login</button>
-    </form>
+        <!--
+            If the view renders with an `error` variable (set by `app.py` on failed
+            login), display it prominently above the form using the `.error` class.
+            Keep rendering simple: the string is not escaped here by Jinja (it is
+            rendered safely by default), but avoid injecting raw HTML from untrusted
+            sources into `error`.
+        -->
+        {% if error %}
+                <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <!--
+            Login form
+            - Uses `method="POST"` to send credentials to the server.
+            - Fields use `required` attribute for basic browser-side validation.
+            - Keep `name` attributes (`username`, `password`) in sync with `app.py`.
+            - For accessibility, each input has a corresponding `<label for=>`.
+        -->
+        <form method="POST" class="login-wrapper">
+                <h2>Login</h2>
+
+                <!-- Username input: short, descriptive label and proper `id`/`name`. -->
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <!-- Password input: use `type="password"` so browsers hide the value. -->
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <!-- Submit button: visually prominent via CSS. -->
+                <button type="submit">Login</button>
+        </form>
 </body>
 </html>

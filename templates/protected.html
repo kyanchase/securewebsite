@@ -1,18 +1,45 @@
 <!DOCTYPE html>
+<!--
+    protected.html
+    - Simple protected area shown only when a user is in the session.
+    - `app.py` passes a `user` variable (session username) when rendering this
+        template. We display it here to personalize the page.
+    - The logout link points at the `logout` route which clears the session.
+-->
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protected Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Document title shown in the browser tab -->
+        <title>Protected Page</title>
+
+        <!-- Site stylesheet is included via Flask's `url_for` helper -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="content-box">
-            <h2>Protected Content</h2>
-            <p>Welcome, {{ user }}! You have successfully logged in.</p>
-            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        <!--
+            Container element: could be used for responsive layout. The inner
+            `.content-box` contains the visual card for the protected content.
+        -->
+        <div class="container">
+                <div class="content-box">
+                        <!-- Clear heading for the protected area -->
+                        <h2>Protected Content</h2>
+
+                        <!--
+                            `user` is supplied by the view (see `app.py`). Displaying the
+                            username provides a basic confirmation that the session is active.
+                            Avoid showing sensitive information here.
+                        -->
+                        <p>Welcome, {{ user }}! You have successfully logged in.</p>
+
+                        <!--
+                            Logout link: uses `url_for('logout')` to point to the logout route.
+                            The class `logout-button` can be used for styling; if it doesn't
+                            exist in the stylesheet it will render like a normal link.
+                        -->
+                        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+                </div>
         </div>
-    </div>
 </body>
 </html>
