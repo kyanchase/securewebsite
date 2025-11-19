@@ -1,14 +1,12 @@
 Features:
 - Landing page with link to login
 - Login form with username + password fields
+- Sign-up form
 - Session-based authentication
 - Protected page only accessible to logged-in users
+- User passwords encrypted and hashed with argon2
 - Logout functionality
 - Futuristic glass-style UI
-
-Default Credentials:
-- Username: testuser
-- Password: password123
 
 Setup Instructions:
 
