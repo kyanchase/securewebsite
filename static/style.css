@@ -29,6 +29,13 @@ body {
         text-align: center;
 }
 
+.index-body {
+    background-image: url('porsche.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 
 /* ==========================================================
      Card / container styles
