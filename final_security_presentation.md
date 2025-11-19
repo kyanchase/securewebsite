@@ -1,19 +1,19 @@
 # Presentation: Anatomy of a Secure Web Application
 
-**Presenter:** [Your Name]
+**Name:** Kyan Chase
 **Topic:** Analysis of a Secure User Authentication System in Flask
-**Date:** [Date]
+**Date:** 11/19/25
 
 ---
 
-### Introduction (1 minute)
+### Introduction
 *   **Hook:** In today's digital world, secure user authentication isn't a feature—it's the foundation of trust. How do we build a system that not only works but is actively resistant to common cyberattacks?
 *   **Project Overview:** This presentation dissects a web application built with Python and Flask to demonstrate core principles of web security.
 *   **Agenda:** We will explore the application's architecture, from the database to the front end, focusing on three key security pillars: **Confidentiality, Integrity, and Availability.**
 
 ---
 
-### 1. Content & Research Quality (2.5 minutes)
+### 1. Content & Research Quality
 *   **Topic Clearly Explained:** The project is a user authentication system with registration, login, and protected content. Its primary goal is to securely manage user identity and control access to restricted areas.
 *   **Information & Credible Sources:** The security mechanisms implemented are based on industry best practices recommended by **OWASP (Open Web Application Security Project)** and utilize cryptographic libraries endorsed by security experts.
 *   **Concrete Examples / Attacks / Tools:**
@@ -23,7 +23,7 @@
 
 ---
 
-### 2. Technical Depth & Security Understanding (3.5 minutes)
+### 2. Technical Depth & Security Understanding
 *   **Correct Explanation & Technical Vocabulary:**
     *   **Data Confidentiality (Password Storage):**
         *   We never store passwords in plaintext. Instead, we store a **cryptographic hash** using `argon2.hash()`.
@@ -39,7 +39,7 @@
 
 ---
 
-### 3. Organization & Time Management (2 minutes)
+### 3. Organization & Time Management
 *   **Clear Structure (Intro -> Main Points -> Conclusion):**
     *   **Intro:** We defined the project and its security goals.
     *   **Main Points:** We've walked through the key security features, aligning them with the rubric's criteria:
@@ -50,7 +50,7 @@
 
 ---
 
-### Conclusion (1 minute)
+### Conclusion
 *   **Summary of Security Posture:** This application implements a layered defense strategy. It combines strong cryptography for data at rest (passwords), input validation for data in transit, and robust access control logic to protect the system.
 *   **Potential Enhancements:**
     *   **Production Security:** For a real-world deployment, `SESSION_COOKIE_SECURE` should be `True` (requiring HTTPS), and the `secret_key` must be a cryptographically secure random value loaded from a configuration file, not hardcoded.
@@ -60,4 +60,4 @@
 ---
 
 ### 4. Q&A
-*   I am now prepared to answer any questions you may have about the code or its security design.
+*   Are there any questions?
