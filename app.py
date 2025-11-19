@@ -1,86 +1,141 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import sqlite3
+from passlib.hash import argon2
+from functools import wraps
+import re
+import time
+
+login_attempts = {} # { ip_address: [timestamps] }
+MAX_ATTEMPTS = 5          # number of tries allowed
+WINDOW_SECONDS = 60       # time window (1 minute)
+LOCKOUT_SECONDS = 120     # temporary lockout after exceeding attempts
+
+DUMMY_HASH = "$argon2id$v=19$m=65536,t=3,p=4$abcdefghijklmnopqrstuv$abcdefghijklmnopqrstuvabcdefghijklmnopqrstuv"
 
 # Create the Flask application
 app = Flask(__name__)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=False,  # Set to True in production with HTTPS
+)
 
-# Secret key used to sign session cookies.
-# In production, load this from an environment variable or a secrets manager.
-app.secret_key = "seupersecretkey"
+def check_credentials(username, password):
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
+    row = c.fetchone()
+    conn.close()
 
-# Hard-coded credentials for demonstration. Replace with a proper user store
-# (database + hashed passwords) for anything beyond examples or testing.
-USERNAME = "testuser"
-PASSWORD = "password123"
+    if row is None:
+        # prevent timing attacks by verifying against a dummy hash
+        try:
+            argon2.verify(password, DUMMY_HASH)
+        except:
+            pass
+        return False
+    
+    stored_hash = row[0]
+    return argon2.verify(password, stored_hash)
 
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if "user" not in session:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return wrapper
 
 @app.route('/')
 def index():
-    """Render the public landing page.
-
-    Returns the `index.html` template which contains a link to the login page.
-    """
     return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Handle login form display and submission.
+    # If already logged in, redirect straight to protected page
+    if "user" in session:
+        return redirect(url_for("protected"))
 
-    - GET requests: render the login form.
-    - POST requests: validate credentials and set `session['user']` on success.
-      On successful login the user is redirected to the protected page.
+    ip = request.remote_addr
+    now = time.time()
 
-    Note: This uses plain-text comparison for demonstration. Real apps must
-    compare hashed passwords and implement rate-limiting, account lockouts,
-    and CSRF protection.
-    """
+    # Initialize attempts list if none
+    attempts = login_attempts.get(ip, [])
+
+    # Remove attempts older than the window
+    attempts = [t for t in attempts if now - t < WINDOW_SECONDS]
+    login_attempts[ip] = attempts
+
+    # Check if user is locked out
+    if len(attempts) >= MAX_ATTEMPTS:
+        return render_template("login.html", 
+                               error=f"Too many login attempts. Try again in {LOCKOUT_SECONDS} seconds.")
+
     if request.method == 'POST':
         # Read form values submitted by the browser
         username = request.form['username']
+        username = username.strip()
+        if not re.match(r'^[A-Za-z0-9_]{3,30}$', username):
+            return render_template("login.html", error="Invalid username format")
         password = request.form['password']
         
-        # Simple validation: compare against the demo credentials
-        if username == USERNAME and password == PASSWORD:
-            # Store the username in the session to mark the user as authenticated
+        # Validate credentials using check_credentials
+        if check_credentials(username, password):
             session["user"] = username
-            # Redirect to the protected page once authenticated
+            login_attempts[ip] = []
             return redirect(url_for("protected"))
         else:
-            # Render the login template again with an error message
-            return render_template('login.html', error="Invalid credentials")
+            login_attempts[ip].append(now)
+            return render_template("login.html", error="Invalid username or password")
     
     # For GET requests, just show the login form
     return render_template("login.html")
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password']
+
+        if not re.match("^[A-Za-z0-9_]+$", username):
+            return render_template("register.html", error="Invalid username format")
+
+        # Check if the user already exists
+        conn = sqlite3.connect("users.db")
+        c = conn.cursor()
+        c.execute("SELECT id FROM users WHERE username = ?", (username,))
+        existing = c.fetchone()
+
+        if existing:
+            conn.close()
+            return render_template("register.html", error="Username already taken")
+
+        # Hash password
+        password_hash = argon2.hash(password)
+
+        # Insert new user
+        c.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)",
+                  (username, password_hash))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("login"))
+
+    # GET request
+    return render_template("register.html")
 
 @app.route('/protected')
+@login_required
 def protected():
-    """Render a protected page only accessible to logged-in users.
-
-    The route checks for the presence of `session['user']`. If present,
-    it renders `protected.html` and passes the username into the template.
-    Otherwise the client is redirected to the login page.
-    """
-    if "user" in session:
-        # session['user'] is considered the authenticated identity here
-        return render_template("protected.html", user=session["user"])
-    else:
-        # Not authenticated: send user to login
-        return redirect(url_for("login"))
+    return render_template("protected.html", user=session["user"])
     
 
 @app.route('/logout')
 def logout():
-    """Log the user out by removing their identity from the session.
-
-    session.pop("user", None) removes the 'user' key if it exists and has no
-    effect otherwise. This effectively signs the user out.
-    """
     session.pop("user", None)
     return redirect(url_for("index"))
 
 
 if __name__ == '__main__':
-    # Default development server. For production use a WSGI server like
-    # Gunicorn/Uvicorn and ensure debug is disabled.
     app.run()
