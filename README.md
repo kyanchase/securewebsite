@@ -14,12 +14,12 @@ Setup Instructions:
 - git clone https://github.com/your-username/securewebsite.git
 - cd securewebsite
 
-2. Create and activate a virtual environment (first time only)
+2. Create and activate a virtual environment
 - python3 -m venv venv
 - source venv/bin/activate   # On macOS/Linux
 - venv\Scripts\activate      # On Windows
 
-4. Install dependencies:
+3. Install dependencies:
 - pip install -r requirements.txt
 
 4. Start the app
