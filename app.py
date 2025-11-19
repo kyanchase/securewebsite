@@ -20,6 +20,8 @@ app.config.update(
     SESSION_COOKIE_SECURE=False,  # Set to True in production with HTTPS
 )
 
+app.secret_key = "change_this_to_a_random_string"
+
 def check_credentials(username, password):
     conn = sqlite3.connect('users.db')
     c = conn.cursor()

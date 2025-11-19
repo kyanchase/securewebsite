@@ -2,24 +2,28 @@
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Create an Account</h2>
-
-    {% if error %}
-        <p style="color:red">{{ error }}</p>
-    {% endif %}
-
     <form method="POST">
-        <label>Username:</label>
-        <input type="text" name="username" required><br><br>
+        <h2>Create an Account</h2>
 
-        <label>Password:</label>
-        <input type="password" name="password" required><br><br>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
 
         <button type="submit">Register</button>
-    </form>
 
-    <p>Already have an account? <a href="/login">Login</a></p>
+        <p style="margin-top: 1.5rem;">
+            Already have an account? 
+            <a href="{{ url_for('login') }}">Login</a>
+        </p>
+    </form>
 </body>
 </html>

@@ -16,7 +16,9 @@
 </head>
 <body>
         {% if error %}
-                <p class="error">{{ error }}</p>
+                <div class="error-container">
+                        <p class="error">{{ error }}</p>
+                </div>
         {% endif %}
         
         <form method="POST" class="login-wrapper">

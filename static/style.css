@@ -150,9 +150,25 @@ a:hover {
      - Distinct red color and heavier weight to draw attention to validation
          errors returned by the server.
      ========================================================== */
+.error-container {
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+}
+
 .error {
+        display: inline-block;
         color: #ff4d4d;
-        margin-bottom: 1.25rem;
+        background: rgba(30, 30, 30, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        padding: 1rem 1.5rem;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         font-size: 0.95rem;
         font-weight: 600;
 }
