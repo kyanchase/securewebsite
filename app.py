@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask_socketio import SocketIO, emit
 import sqlite3
 from passlib.hash import argon2
 from functools import wraps
@@ -14,6 +15,7 @@ DUMMY_HASH = "$argon2id$v=19$m=65536,t=3,p=4$abcdefghijklmnopqrstuv$abcdefghijkl
 
 # Create the Flask application
 app = Flask(__name__)
+socketio = SocketIO(app)
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
@@ -139,5 +141,13 @@ def logout():
     return redirect(url_for("index"))
 
 
+@socketio.on("message")
+def handle_message(message):
+    """Broadcast messages to all clients."""
+    # Include the username with the message
+    user = session.get("user", "Anonymous")
+    emit("message", f"{user}: {message}", broadcast=True)
+
+
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)

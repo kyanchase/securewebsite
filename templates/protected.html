@@ -23,23 +23,48 @@
         -->
         <div class="container">
                 <div class="content-box">
-                        <!-- Clear heading for the protected area -->
                         <h2>Protected Content</h2>
-
-                        <!--
-                            `user` is supplied by the view (see `app.py`). Displaying the
-                            username provides a basic confirmation that the session is active.
-                            Avoid showing sensitive information here.
-                        -->
                         <p>Welcome, {{ user }}! You have successfully logged in.</p>
+                        
+                        <div id="chat">
+                                <div id="messages"></div>
+                                <div id="chat_input_area">
+                                        <input id="message_input" placeholder="Type a message...">
+                                        <button onclick="sendMessage()">Send</button>
+                                </div>
+                        </div>
 
-                        <!--
-                            Logout link: uses `url_for('logout')` to point to the logout route.
-                            The class `logout-button` can be used for styling; if it doesn't
-                            exist in the stylesheet it will render like a normal link.
-                        -->
                         <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
                 </div>
         </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+        <script>
+                const socket = io();
+
+                socket.on("connect", () => {
+                        console.log("Connected to server");
+                });
+
+                socket.on("disconnect", () => {
+                        console.log("Disconnected from server");
+                });
+
+                socket.on("message", (msg) => {
+                        const messagesDiv = document.getElementById("messages");
+                        const messageElement = document.createElement("div");
+                        messageElement.innerHTML = msg;
+                        messagesDiv.appendChild(messageElement);
+                });
+
+                function sendMessage() {
+                        const input = document.getElementById("message_input");
+                        const message = input.value;
+                        if (message) {
+                                socket.send(message);
+                                input.value = "";
+                        }
+                }
+        </script>
 </body>
 </html>
